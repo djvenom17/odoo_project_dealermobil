@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- res.partner tree view -->
+    <record id="res_partner_silver_view_tree" model="ir.ui.view">
+        <field name="name">Data silver Employee</field>
+        <field name="model">res.partner</field>
+        <field name="mode">extension</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+                <xpath expr="//field[@name='email']" position="after">
+                    <field name="member_silver"/>
+                    <field name="member_gold"/>
+                </xpath> 
+        </field>
+    </record>
+
+    <!-- res.partner form view -->
+    <record id="res_partner_junior_view_form" model="ir.ui.view">
+        <field name="name">Form silver Employee</field>
+        <field name="model">res.partner</field>
+        <field name="mode">extension</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='vat']" position="after">
+                <field name="member_silver"/>
+                <field name="member_gold"/>
+            </xpath> 
+            <xpath expr="//field[@name='vat']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="res_partner_silver_inherit_search" model="ir.ui.view">
+        <field name="name">res.partner.inherit.view.search</field>
+        <field name="model">res.partner</field>
+        <field name="mode">extension</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <field name="parent_id" position='after'>
+                <filter name="silver" string="silver" domain="[('member_silver', '=', 'True')]"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- res.partner action window -->
+    <record id="res_partner_silver_action" model="ir.actions.act_window">
+        <field name="name">Data Member silver</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="context">
+            {
+                'search_default_silver':1,
+                'default_member_silver':True
+            }
+        </field>
+    </record>
+
+    <!-- This Menu Item must have a parent and an action -->
+    <menuitem id="dealerpandu_silver_menu_act" 
+              name="Silver" 
+              parent="pelanggan_menu_categ" 
+              action="res_partner_silver_action" 
+              sequence="10"/>
+
+</odoo>

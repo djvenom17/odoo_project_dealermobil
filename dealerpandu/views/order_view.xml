@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- dealerpandu.order tree view -->
+    <record id="dealerpandu_order_view_tree" model="ir.ui.view">
+        <field name="name">Order History</field>
+        <field name="model">dealerpandu.order</field>
+        <field name="arch" type="xml">
+            <tree>
+            <header>
+                <button name="%(dealerpandu_wizardinvoiceorder_action)d" string="Invoice Order" type="action" class="btn btn-warning"/>
+
+            </header>   
+                <!-- Add your fields here -->
+                <field name="name"/>
+                <field name="nama_pembeli"/>
+                <field name="member_silver" readonly="1" force_save="1"/>
+                <field name="member_gold" readonly="1" force_save="1"/>
+                <field name="tgl_order"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="total_bayar"/>
+                <field name="state" 
+                    widget="badge"
+                    decoration-success="state == 'done'"
+                    decoration-danger="state == 'cancel'"
+                    decoration-info="state == 'confirm'"
+                    decoration-muted="state == 'draft'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- dealerpandu.order form view -->
+    <record id="dealerpandu_order_view_form" model="ir.ui.view">
+        <field name="name">Form Order</field>
+        <field name="model">dealerpandu.order</field>
+        <field name="arch" type="xml">
+            <form string="Order Form">
+                <header>
+                    <button string="Confirm" name="action_confirm" type="object" class="btn btn-primary" states="draft"/>
+                    <button string="Done" name="action_done" type="object" class="btn btn-primary" states="confirm"/>
+                    <button string="Cancel" name="action_cancel" type="object" class="btn btn-warning" states="confirm" confirm="Anda Yakin mau Cancel ?"/>
+                    <button string="Kembali ke Draft" name="action_draft" type="object" class="btn btn-danger" states="cancel" confirm="Anda Yakin untuk meng-Edit?"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm,done"/>
+                </header>
+                <sheet>
+                    <group name="data_order" string="Data Pembeli">
+                        <!-- Add your fields here -->
+                        <field name="name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="nama_pembeli" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        <!-- force_save  -->
+                        <field name="tgl_order" readonly="1" force_save="1"/>
+                        <field name="currency_id" invisible="0" string="Kurs"/>
+                        <field name="total_bayar" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1" force_save="1"/>
+                    </group>
+                    <group name="member_status" string="Member Status">
+                        <field name="member_silver" readonly="1" force_save="1"/>
+                        <field name="member_gold" readonly="1" force_save="1"/>
+                    </group>
+                    <group name="daftarorder" string="Daftar Order">
+                        <field name="detailorder_ids" attrs="{'readonly': [('state', '!=', 'draft')]}">
+                            <tree editable='bottom'>
+                                <field name="daftarmobil_id"/>
+                                <field name="cost_satuan"/>
+                                <field name="qty_order"/>
+                                <field name="sub_total" sum='Total'/>
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- dealerpandu.order action window -->
+    <record id="dealerpandu_order_action" model="ir.actions.act_window">
+        <field name="name">Order Mobil</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">dealerpandu.order</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- This Menu Item must have a parent and an action -->
+    <menuitem id="dealerpandu_order_menu_act" 
+              name="Order Mobil" 
+              parent="dealerpandu_menu_root" 
+              action="dealerpandu_order_action" 
+              sequence="50"/>
+
+</odoo>

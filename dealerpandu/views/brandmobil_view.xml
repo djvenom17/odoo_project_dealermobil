@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- dealerpandu.brandmobil tree view -->
+    <record id="dealerpandu_brandmobil_view_tree" model="ir.ui.view">
+        <field name="name">Brand Mobil</field>
+        <field name="model">dealerpandu.brandmobil</field>
+        <field name="arch" type="xml">
+            <tree>
+                <!-- Add your fields here -->
+                <field name="name"/>
+                <field name="founder_brand"/>
+                <field name="brand_country"/> 
+                <field name="jml_mobil"/>
+                <field name="daftar"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- dealerpandu.brandmobil form view -->
+    <record id="dealerpandu_brandmobil_view_form" model="ir.ui.view">
+        <field name="name">Masukan Brand Mobil</field>
+        <field name="model">dealerpandu.brandmobil</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <field name="logo_brand" widget="image" class="oe_avatar"/>
+                    <group name="brand" string="Data Brand">
+                        <!-- Add your fields here -->
+                        <field name="name"/>
+                        <field name="brand_country"/> 
+                        <field name="founder_brand"/>
+                        <field name="jml_mobil"/>
+                    </group>
+                    <group name="daftar" string="Daftar Mobil">
+                        <field name="daftarmobil_ids"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- dealerpandu.brandmobil kanban view -->
+    <record id="dealerpandu_brandmobil_view_kanban" model="ir.ui.view">
+        <field name="name">Kanban View</field>
+        <field name="model">dealerpandu.brandmobil</field>
+        <field name="arch" type="xml">
+            <kanban string="Kanban Description">
+                <field name="name"/>
+                <field name="brand_country"/>
+                <field name="founder_brand"/>
+                <field name="jml_mobil"/>
+                <!-- wajib ada field id untuk define img -->
+                <field name="id"/>
+                <field name="logo_brand"/>
+                <templates id="template_id" name="template_name">
+                    <t t-name="kanban-box">
+                        <!-- kanban global click -->
+                        <div class="oe_kanban_global_click o_kanban_record_has_image_fill">
+                            <!-- format kanban view('module_name','field_name',record.id.raw_value, placeholder) -->
+                            <div class="o_kanban_image d-none d-md-block" t-attf-style="background-image:url('#{kanban_image('dealerpandu.brandmobil','logo_brand', record.id.raw_value, placeholder)}')">
+                                <!-- <img class="oe_kanban_image_inner_pic" 
+                                    t-att-src="kanban_image('dealerpandu.brandmobil','logo_brand', record.id.raw_value)"/> -->
+                            </div>
+                            
+                            <div class="oe_kanban_details d-flex flex-column">
+                                <strong>
+                                    <span t-esc="record.name.raw_value"/>
+                                </strong>
+                                <ul>
+                                    <li>Brand Country :-<span t-esc="record.brand_country.raw_value"/></li>
+                                    <li>Founder Brand :-<span t-esc="record.founder_brand.raw_value"/></li>
+                                    <li>Jumlah Mobil :-<span t-esc="record.jml_mobil.raw_value"/></li>
+                                    <!-- <li>Daftar Mobil :-<span t-esc="record.daftarmobil_ids.raw_value"/></li> -->
+                                </ul>
+                            </div>
+                        </div>
+                    </t>  
+                </templates>
+            </kanban>             
+        </field>
+    </record>
+
+    <!-- dealerpandu.brandmobil action window -->
+    <record id="dealerpandu_brandmobil_action" model="ir.actions.act_window">
+        <field name="name">Brand Mobil</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">dealerpandu.brandmobil</field>
+        <field name="view_mode">tree,kanban,form</field>
+    </record>
+
+    <!-- This Menu Item must have a parent and an action -->
+    <menuitem id="dealerpandu_brandmobil_menu_act" 
+              name="Brand Mobil" 
+              parent="katalog_menu_categ" 
+              action="dealerpandu_brandmobil_action" 
+              sequence="10"/>
+
+</odoo>
